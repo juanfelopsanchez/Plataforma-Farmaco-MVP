@@ -1,237 +1,151 @@
-<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Farmacología Pro</title>
-    <style>
-        body{font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; background:#eef2f7; color: #333;}
-        header{background:#111; color:#fff; padding:20px; text-align:center; box-shadow: 0 2px 10px rgba(0,0,0,0.2)}
-        .container{max-width:800px; margin:auto; padding:20px}
-        .card{background:#fff; padding:25px; margin:15px 0; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.08)}
-        
-        h3 { border-bottom: 2px solid #4CAF50; padding-bottom: 5px; color: #2c3e50; }
-        
-        .grid-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        
-        button{
-            padding:12px; border:none; border-radius:8px; background:#4CAF50; color:#fff; 
-            cursor:pointer; font-weight: bold; transition: background 0.3s;
-        }
-        button:hover{ background:#45a049; }
-        button.secondary { background: #2196F3; }
-        
-        #quiz, #dashboard{display:none}
-        
-        #answer {
-            width: 100%; padding: 10px; margin: 15px 0; border: 2px solid #ddd; 
-            border-radius: 8px; box-sizing: border-box; font-size: 16px;
-        }
-        
-        #feedback { font-weight: bold; margin: 15px 0; padding: 10px; border-radius: 5px; }
-        .timer-badge { background: #ff9800; color: white; padding: 5px 10px; border-radius: 20px; font-weight: bold; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farmacología Pro</title>
+<style>
+body{font-family:Arial;margin:0;background:#eef2f7}
+header{background:#111;color:#fff;padding:15px;text-align:center}
+.container{max-width:900px;margin:auto;padding:20px}
+.card{background:#fff;padding:15px;margin:10px 0;border-radius:10px;box-shadow:0 0 8px rgba(0,0,0,.1)}
+button{padding:10px 15px;border:none;border-radius:6px;background:#4CAF50;color:#fff;cursor:pointer}
+#quiz{display:none}
+#dashboard{display:none}
+</style>
 </head>
 <body>
-
 <header><h2>🧠 Farmacología Pro</h2></header>
-
 <div class="container">
 
-    <div id="menu" class="card">
-        <h3>🧠 Neurofarmacología</h3>
-        <div class="grid-buttons">
-            <button onclick="startModule('antiepilepticos')">Antiepilépticos</button>
-            <button onclick="startModule('anestesicos')">Anestésicos</button>
-            <button onclick="startModule('antidepresivos')">Antidepresivos</button>
-        </div>
+<div id="menu" class="card">
+<h3>🧠 Neuro</h3>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/Antiepil-pticos-/')">Antiepilépticos</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/Anest-sicos/')">Anestésicos</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/colin-rgicos/')">Colinérgicos</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/adren-rgicos/')">Adrenérgicos</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/antidepresivos/')">Antidepresivos</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/antipsicoticos/')">Antipsicóticos</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/Trastornos-del-movimiento-/')">Parkinson</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/Manejo-del-Dolor/')">Dolor</button>
 
-        <h3>❤️ Cardiovascular</h3>
-        <div class="grid-buttons">
-            <button onclick="startModule('antihipertensivos')">Antihipertensivos</button>
-        </div>
+<h3>❤️ Cardio</h3>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/Antihipertensivos/')">Antihipertensivos</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/Antiarr-tmicos-/')">Antiarrítmicos</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/hemostasia/')">Hemostasia</button>
 
-        <h3>🌬️ Respiratorio</h3>
-        <div class="grid-buttons">
-            <button onclick="startModule('antialergicos')">Antialérgicos</button>
-        </div>
-        
-        <hr>
-        <button class="secondary" style="width:100%" onclick="showDashboard()">📊 Ver Progreso Global</button>
-    </div>
+<h3>🌬️ Respiratorio</h3>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/Broncodilatadores/')">Broncodilatadores</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/antiinflamatorios-/')">Antiinflamatorios</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/antial-rgicos/')">Antialérgicos</button>
+<button onclick="showDashboard()">📊 Ver Progreso</button>
+</div>
+  
 
-    <div id="quiz" class="card">
-        <div style="display:flex; justify-content:space-between; align-items:center">
-            <span id="progress"></span>
-            <span id="timer" class="timer-badge">⏱ 60</span>
-        </div>
-        <h2 id="question" style="margin-top:20px"></h2>
-        <input type="text" id="answer" placeholder="Escribe tu respuesta aquí..." autocomplete="off">
-        
-        <div style="display:flex; gap:10px">
-            <button id="btnSubmit" onclick="submitAnswer()" style="flex:2">Responder</button>
-            <button onclick="skip()" style="background:#9e9e9e; flex:1">Saltar</button>
-        </div>
-        
-        <div id="feedback"></div>
-        <button id="next" onclick="nextQ()" style="display:none; width:100%; background:#673ab7">Siguiente Pregunta ➔</button>
-    </div>
+<div id="quiz" class="card">
+<p id="progress"></p>
+<p id="timer"></p>
+<p id="question"></p>
+<input id="answer">
+<br>
+<button onclick="submitAnswer()">Responder</button>
+<button onclick="skip()">No sé</button>
+<p id="feedback"></p>
+<button onclick="nextQ()" id="next" style="display:none">Siguiente</button>
+</div>
 
-    <div id="dashboard" class="card">
-        <h3>📊 Tu Historial</h3>
-        <div id="stats"></div>
-        <br>
-        <button class="secondary" onclick="backMenu()">Volver al Inicio</button>
-    </div>
+<div id="dashboard" class="card">
+<h3>📊 Progreso</h3>
+<div id="stats"></div>
+<button onclick="backMenu()">Volver</button>
+</div>
 
 </div>
 
 <script>
-// BANCO DE DATOS INTEGRADO
-const bank = {
-    antiepilepticos: [
-        {q: "¿Mecanismo de acción de la Carbamazepina?", a: ["bloqueo canales de sodio", "canales de sodio", "sodio"]},
-        {q: "¿Fármaco de elección para crisis de ausencia?", a: ["etoxusimida", "acido valproico", "valproato"]},
-        {q: "¿Mecanismo del Topiramato?", a: ["bloqueo canales de sodio", "potenciacion gaba", "antagonista glutamato"]}
-    ],
-    anestesicos: [
-        {q: "¿Anestésico local tipo amida?", a: ["lidocaina", "bupivacaina", "mepivacaina"]},
-        {q: "¿Inhalado con mayor riesgo de hipertermia maligna?", a: ["halotano", "isoflurano"]}
-    ],
-    antialergicos: [
-        {q: "¿Receptor bloqueado en rinitis alérgica?", a: ["h1", "receptor h1"]},
-        {q: "¿Fármaco de primera elección en anafilaxia?", a: ["adrenalina", "epinefrina"]}
-    ],
-    antihipertensivos: [
-        {q: "¿Ejemplo de un fármaco IECA?", a: ["enalapril", "captopril", "lisinopril"]},
-        {q: "¿Efecto adverso característico de los IECA?", a: ["tos", "tos seca", "angioedema"]}
-    ],
-    antidepresivos: [
-        {q: "¿Ejemplo de un ISRS?", a: ["fluoxetina", "sertralina", "escitalopram"]},
-        {q: "¿Efecto adverso común de los ISRS?", a: ["disfuncion sexual", "insomnio", "nauseas"]}
-    ]
+let bank={
+antialergicos:[
+{q:"Receptor bloqueado en alergia",a:["h1"]},
+{q:"Fármaco en anafilaxia",a:["adrenalina"]}
+],
+antihipertensivos:[
+{q:"IECA ejemplo",a:["enalapril"]},
+{q:"ARA II ejemplo",a:["losartan"]}
+],
+antidepresivos:[
+{q:"ISRS ejemplo",a:["fluoxetina"]},
+{q:"Efecto adverso ISRS",a:["disfuncion sexual"]}
+]
 };
 
-let current = [];
-let i = 0;
-let score = 0;
-let time = 60;
-let t;
-
-function startModule(m) {
-    if(!bank[m]) {
-        alert("Contenido en desarrollo para esta sección.");
-        return;
-    }
-    // Mezcla las preguntas y selecciona máximo 10
-    current = bank[m].sort(() => 0.5 - Math.random()).slice(0, 10);
-    i = 0;
-    score = 0;
-    document.getElementById('menu').style.display = 'none';
-    document.getElementById('quiz').style.display = 'block';
-    load();
+function goToQuiz(url){
+  window.location.href = url; 
 }
 
-function load() {
-    time = 60;
-    document.getElementById('timer').innerText = '⏱ ' + time;
-    document.getElementById('progress').innerText = `Pregunta ${i + 1} de ${current.length}`;
-    document.getElementById('question').innerText = current[i].q;
-    document.getElementById('answer').value = '';
-    document.getElementById('answer').disabled = false;
-    document.getElementById('feedback').innerText = '';
-    document.getElementById('feedback').style.background = 'transparent';
-    document.getElementById('next').style.display = 'none';
-    document.getElementById('btnSubmit').style.display = 'block';
-    document.getElementById('answer').focus();
-    startTimer();
+let current=[];let i=0;let score=0;let time=60;let t;
+
+function startModule(m){
+current=bank[m].sort(()=>0.5-Math.random()).slice(0,10);
+i=0;score=0;
+document.getElementById('menu').style.display='none';
+document.getElementById('quiz').style.display='block';
+load();
 }
 
-function startTimer() {
-    clearInterval(t);
-    t = setInterval(() => {
-        time--;
-        document.getElementById('timer').innerText = '⏱ ' + time;
-        if (time <= 0) {
-            clearInterval(t);
-            submitAnswer(true);
-        }
-    }, 1000);
+function load(){
+time=60;
+document.getElementById('question').innerText=current[i].q;
+document.getElementById('answer').value='';
+document.getElementById('feedback').innerText='';
+document.getElementById('next').style.display='none';
+startTimer();
 }
 
-function normalize(x) {
-    return x.toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+function startTimer(){
+clearInterval(t);
+t=setInterval(()=>{
+time--;document.getElementById('timer').innerText='⏱ '+time;
+if(time<=0){clearInterval(t);submitAnswer(true);}
+},1000);
 }
 
-function submitAnswer(timeout = false) {
-    clearInterval(t);
-    let user = normalize(document.getElementById('answer').value);
-    let correctOnes = current[i].a.map(normalize);
-    let isCorrect = correctOnes.includes(user);
-    
-    let fb = document.getElementById('feedback');
-    let pts = isCorrect ? Math.round((time / 60) * 10) : 0;
-    score += pts;
+function normalize(x){return x.toLowerCase();}
 
-    if (timeout) {
-        fb.innerText = "⏰ ¡Tiempo agotado! La respuesta era: " + current[i].a[0];
-        fb.style.background = "#fff3cd";
-    } else if (isCorrect) {
-        fb.innerText = "✅ ¡Correcto! +" + pts + " puntos.";
-        fb.style.background = "#d4edda";
-    } else {
-        fb.innerText = "❌ Incorrecto. Era: " + current[i].a[0];
-        fb.style.background = "#f8d7da";
-    }
-
-    document.getElementById('answer').disabled = true;
-    document.getElementById('btnSubmit').style.display = 'none';
-    document.getElementById('next').style.display = 'block';
+function submitAnswer(timeout=false){
+clearInterval(t);
+let user=document.getElementById('answer').value;
+let correct=current[i].a;
+let ok=correct.includes(normalize(user));
+let pts=ok?Math.round((time/60)*10):0;
+score+=pts;
+let fb=timeout?"⏰ Tiempo": ok?"✅ +"+pts:"❌ "+correct[0];
+document.getElementById('feedback').innerText=fb;
+document.getElementById('next').style.display='block';
 }
 
-function skip() { submitAnswer(true); }
+function skip(){submitAnswer(true)}
 
-function nextQ() {
-    i++;
-    if (i < current.length) {
-        load();
-    } else {
-        end();
-    }
+function nextQ(){
+i++;
+if(i<current.length){load();}else{end();}
 }
 
-function end() {
-    document.getElementById('quiz').style.display = 'none';
-    let history = JSON.parse(localStorage.getItem('history') || '[]');
-    history.push({ score, date: new Date().toLocaleString() });
-    localStorage.setItem('history', JSON.stringify(history));
-    
-    alert(`🎉 Quiz terminado. Tu puntaje: ${score}`);
-    backMenu();
+function end(){
+document.getElementById('quiz').style.display='none';
+let h=JSON.parse(localStorage.getItem('history')||'[]');
+h.push({score,date:new Date()});
+localStorage.setItem('history',JSON.stringify(h));
+alert('Puntaje '+score);
+location.reload();
 }
 
-function showDashboard() {
-    document.getElementById('menu').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    let history = JSON.parse(localStorage.getItem('history') || '[]');
-    let statsDiv = document.getElementById('stats');
-    
-    if(history.length === 0) {
-        statsDiv.innerHTML = "<p>Aún no has realizado quices.</p>";
-    } else {
-        statsDiv.innerHTML = history.reverse().map(h => 
-            `<div style="border-bottom:1px solid #eee; padding:5px">
-                <b>${h.score} pts</b> - <small>${h.date}</small>
-            </div>`
-        ).join('');
-    }
+function showDashboard(){
+document.getElementById('menu').style.display='none';
+document.getElementById('dashboard').style.display='block';
+let h=JSON.parse(localStorage.getItem('history')||'[]');
+document.getElementById('stats').innerText='Intentos: '+h.length;
 }
 
-function backMenu() {
-    document.getElementById('quiz').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('menu').style.display = 'block';
-}
+function backMenu(){location.reload();}
 </script>
 
 </body>
