@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farmacología Pro</title>
+<style>
+body{font-family:Arial;margin:0;background:#eef2f7}
+header{background:#111;color:#fff;padding:15px;text-align:center}
+.container{max-width:900px;margin:auto;padding:20px}
+.card{background:#fff;padding:15px;margin:10px 0;border-radius:10px;box-shadow:0 0 8px rgba(0,0,0,.1)}
+button{padding:10px 15px;border:none;border-radius:6px;background:#4CAF50;color:#fff;cursor:pointer}
+#quiz{display:none}
+#dashboard{display:none}
+</style>
+</head>
+<body>
+<header><h2>🧠 Farmacología Pro</h2></header>
+<div class="container">
+
+<div id="menu" class="card">
+<h3>🧠 Neuro</h3>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/Antiepil-pticos-/')">Antiepilépticos</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/Anest-sicos/')">Anestésicos</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/colin-rgicos/')">Colinérgicos</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/adren-rgicos/')">Adrenérgicos</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/antidepresivos/')">Antidepresivos</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/antipsicoticos/')">Antipsicóticos</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/Trastornos-del-movimiento-/')">Parkinson</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/Manejo-del-Dolor/')">Dolor</button>
+
+<h3>❤️ Cardio</h3>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/Antihipertensivos/')">Antihipertensivos</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/Antiarr-tmicos-/')">Antiarrítmicos</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/hemostasia/')">Hemostasia</button>
+
+<h3>🌬️ Respiratorio</h3>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/Broncodilatadores/')">Broncodilatadores</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/antiinflamatorios-/')">Antiinflamatorios</button>
+<button onclick="goToQuiz('https://juanfelopsanchez.github.io/antial-rgicos/')">Antialérgicos</button>
+<button onclick="showDashboard()">📊 Ver Progreso</button>
+</div>
+  
+
+<div id="quiz" class="card">
+<p id="progress"></p>
+<p id="timer"></p>
+<p id="question"></p>
+<input id="answer">
+<br>
+<button onclick="submitAnswer()">Responder</button>
+<button onclick="skip()">No sé</button>
+<p id="feedback"></p>
+<button onclick="nextQ()" id="next" style="display:none">Siguiente</button>
+</div>
+
+<div id="dashboard" class="card">
+<h3>📊 Progreso</h3>
+<div id="stats"></div>
+<button onclick="backMenu()">Volver</button>
+</div>
+
+</div>
+
+<script>
+let bank={
+antialergicos:[
+{q:"Receptor bloqueado en alergia",a:["h1"]},
+{q:"Fármaco en anafilaxia",a:["adrenalina"]}
+],
+antihipertensivos:[
+{q:"IECA ejemplo",a:["enalapril"]},
+{q:"ARA II ejemplo",a:["losartan"]}
+],
+antidepresivos:[
+{q:"ISRS ejemplo",a:["fluoxetina"]},
+{q:"Efecto adverso ISRS",a:["disfuncion sexual"]}
+]
+};
+
+let current=[];let i=0;let score=0;let time=60;let t;
+
+function startModule(m){
+current=bank[m].sort(()=>0.5-Math.random()).slice(0,10);
+i=0;score=0;
+document.getElementById('menu').style.display='none';
+document.getElementById('quiz').style.display='block';
+load();
+}
+
+function load(){
+time=60;
+document.getElementById('question').innerText=current[i].q;
+document.getElementById('answer').value='';
+document.getElementById('feedback').innerText='';
+document.getElementById('next').style.display='none';
+startTimer();
+}
+
+function startTimer(){
+clearInterval(t);
+t=setInterval(()=>{
+time--;document.getElementById('timer').innerText='⏱ '+time;
+if(time<=0){clearInterval(t);submitAnswer(true);}
+},1000);
+}
+
+function normalize(x){return x.toLowerCase();}
+
+function submitAnswer(timeout=false){
+clearInterval(t);
+let user=document.getElementById('answer').value;
+let correct=current[i].a;
+let ok=correct.includes(normalize(user));
+let pts=ok?Math.round((time/60)*10):0;
+score+=pts;
+let fb=timeout?"⏰ Tiempo": ok?"✅ +"+pts:"❌ "+correct[0];
+document.getElementById('feedback').innerText=fb;
+document.getElementById('next').style.display='block';
+}
+
+function skip(){submitAnswer(true)}
+
+function nextQ(){
+i++;
+if(i<current.length){load();}else{end();}
+}
+
+function end(){
+document.getElementById('quiz').style.display='none';
+let h=JSON.parse(localStorage.getItem('history')||'[]');
+h.push({score,date:new Date()});
+localStorage.setItem('history',JSON.stringify(h));
+alert('Puntaje '+score);
+location.reload();
+}
+
+function showDashboard(){
+document.getElementById('menu').style.display='none';
+document.getElementById('dashboard').style.display='block';
+let h=JSON.parse(localStorage.getItem('history')||'[]');
+document.getElementById('stats').innerText='Intentos: '+h.length;
+}
+
+function backMenu(){location.reload();}
+</script>
+
+</body>
+</html>
